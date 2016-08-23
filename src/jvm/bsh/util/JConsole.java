@@ -538,6 +538,32 @@ public class JConsole extends JScrollPane
 		}
 		//text.repaint();
 	}
+        //Added to make this easier to feed input from the outside.
+    	public void readLine(String line) {
+		//FIXME: what did this do?
+		//line = buf.toString();
+
+		if (outPipe == null) {
+			print("Console internal	error: cannot output ...", Color.red);
+		} else {
+			try {
+				outPipe.write(line);
+				outPipe.flush();
+			} catch (IOException e) {
+				outPipe = null;
+				throw new RuntimeException("Console pipe broken...");
+			}
+		}
+		//text.repaint();
+	}
+
+    //Added to allow manual trigger of input entry.
+       public void enterEvent (){	   
+	       enter();
+	       resetCommandStart();
+	       text.setCaretPosition(cmdStart);	  
+	       text.repaint();	  
+       }
 
 	public void println(Object o) {
 		print(String.valueOf(o) + "\n");

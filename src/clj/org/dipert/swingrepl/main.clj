@@ -31,6 +31,26 @@
       :prompt #(print "dr => ")
       :eval (comment "See make-dbg-repl-jframe")})
 
+;;Added by Tom...
+(defn send-repl
+  "Sends a string xs, assumably an evaluable expression in string form, 
+   across the shell's inPipe, which is surprisingly hard to do.  Echoes 
+   the input to the console, and evaluates as if the user had entered
+   the input, complete with an enter keypress."
+  [^bsh.util.JConsole rpl ^String xs]
+  (do (.readLine rpl xs)
+      (.print rpl xs)
+      (.enterEvent rpl)))
+
+(defmacro eval-repl
+  "Convenience macro.  Allows us to evaluate arbitrary expressions in 
+   the swingrepl.  Provides the string conversion for us."
+  [rpl & body]
+  (let [r (with-meta (gensym "swingrepl") {:tag 'bsh.util.JConsole})]
+    `(let [~r ~rpl]
+       (send-repl ~r
+                  ~(str (first body))))))
+
 (defn- make-repl-thread [console & repl-args]
   (binding [*out* (.getOut console)
             *in*  (clojure.lang.LineNumberingPushbackReader. (.getIn console))
@@ -45,9 +65,9 @@
 (defn make-repl-jconsole
   "Returns a JConsole component"
   [options]
-  (let [{:keys [font prompt init eval eof]} options
-        console (bsh.util.JConsole. font)
-        thread (make-repl-thread console :prompt prompt :init init :eval eval)
+  (let [{:keys [font prompt init eval eof in out]} options
+        console (bsh.util.JConsole. in out font)
+        thread  (make-repl-thread console :prompt prompt :init init :eval eval)
         stopper (clojure.repl/thread-stopper thread)]
     (doto console
       (.setInterruptFunction (fn [reason] (stopper reason)))
