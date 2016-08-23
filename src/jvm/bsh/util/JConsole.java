@@ -564,6 +564,19 @@ public class JConsole extends JScrollPane
 	       text.setCaretPosition(cmdStart);	  
 	       text.repaint();	  
        }
+    //Added to allow manual trigger of interrupts.
+       public void interruptEvent (){
+	   if(interruptFunction != null) {
+	       interruptFunction.invoke("User pressed Ctrl-C");
+	   }
+       }
+
+      public void eofEvent (){
+	  if(eofFunction != null) {
+	      eofFunction.invoke("End of File");
+	  }
+      }
+	
 
 	public void println(Object o) {
 		print(String.valueOf(o) + "\n");

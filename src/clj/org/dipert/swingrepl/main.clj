@@ -41,7 +41,7 @@
   (do (.readLine rpl xs)
       (.print rpl xs)
       (.enterEvent rpl)))
-
+;;Added by Tom...
 (defmacro eval-repl
   "Convenience macro.  Allows us to evaluate arbitrary expressions in 
    the swingrepl.  Provides the string conversion for us."
@@ -70,7 +70,8 @@
         thread  (make-repl-thread console :prompt prompt :init init :eval eval)
         stopper (clojure.repl/thread-stopper thread)]
     (doto console
-      (.setInterruptFunction (fn [reason] (stopper reason)))
+      (.setInterruptFunction (fn [reason]
+                               (stopper reason)))
       (.setEOFFunction eof))
     (.start thread)
     console))
