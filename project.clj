@@ -9,4 +9,6 @@
    EPL 1.0 license."
   :dependencies [[org.clojure/clojure "1.7.0"]]
   :plugins [[lein-localrepo "0.5.3"]]
+  :license "EPL 1.0"
+  :url "https://github.com/joinr/clj-swingrepl/"
   :main org.dipert.swingrepl.main)
