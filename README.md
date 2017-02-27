@@ -10,12 +10,29 @@ Build
 * `lein deps`
 * `lein javac`
 
+Install
+-------
+You can pull the joinr fork from clojars at: 
+
+
 Run
 ---
 
 You can run `lein swank` and connect with SLIME via Emacs, or you can build a distributable jar with `lein uberjar`
 
 To run, use something like `java -jar swingrepl-standalone.jar`
+
+Updates (joinr fork Feb 2017)
+-------
+
+clj-swingrepl now supports the ability to send code to the repl as if the user 
+typed the code, effectively allowing "echoing" of output to repl.
+
+* org.dipert.swingrepl.main/send-repl
+* This provides a useful platform for embedding a live "repl" in your 
+  host application that you can send input to as if the user typed it.
+* Users can click on widgets, use buttons, etc. and see the corresponding 
+  clojure forms that are evaluated.
 
 Todo
 ----
